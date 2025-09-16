@@ -5,11 +5,18 @@
     <vendor>sheasmith</vendor>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.database</depends>
 
-    <resource-bundle>messages.MyBundle</resource-bundle>
-
-    <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.sheasmith.backpack.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-        <postStartupActivity implementation="com.github.sheasmith.backpack.startup.MyProjectActivity" />
-    </extensions>
+    <actions>
+        <action id="com.github.sheasmith.backpack.ExportBacpacAction"
+                class="com.github.sheasmith.backpack.ExportBacpacAction" text="Export BACPAC"
+                description="Export a bacpac from the selected database">
+            <add-to-group group-id="DatabaseViewPopupMenu" anchor="last"/>
+        </action>
+        <action id="com.github.sheasmith.backpack.ImportBacpacAction"
+                class="com.github.sheasmith.backpack.ImportBacpacAction" text="Import BACPAC"
+                description="Import a bacpac file into your server">
+            <add-to-group group-id="DatabaseViewPopupMenu" anchor="last"/>
+        </action>
+    </actions>
 </idea-plugin>
