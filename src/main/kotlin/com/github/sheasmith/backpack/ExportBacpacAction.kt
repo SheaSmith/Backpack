@@ -75,7 +75,7 @@ internal class ExportBacpacAction : DumbAwareAction() {
             port = null
 
         val commands = mutableListOf(
-            "SqlPackage",
+            "sqlpackage",
             "/Action:Export",
             "/TargetFile:$targetPath",
             "/SourceServerName:$host${port?.let { ",$it" } ?: ""}",
@@ -86,8 +86,14 @@ internal class ExportBacpacAction : DumbAwareAction() {
         if (dataSource.authProviderId == "ms-sso") {
 //            commands.add("/UniversalAuthentication:true")
         }
-        else {
+        else if (dataSource.authProviderId == "user-pass") {
             val credentials = DatabaseCredentials.getInstance().getCredentials(dataSource)
+            commands.addAll(arrayOf("/SourceUser:${credentials.userName!!}", "/SourcePassword:${credentials.getPasswordAsString()!!}"))
+        }
+        else if (dataSource.authProviderId.startsWith("ms-azure-active-directory")) {
+            val credentials = DatabaseCredentials.getInstance().getCredentials(dataSource)
+//            commands.add("/SourceUser:${credentials.userName!!}")
+            commands.add("/UniversalAuthentication:True")
         }
 
         val project = e.project ?: return

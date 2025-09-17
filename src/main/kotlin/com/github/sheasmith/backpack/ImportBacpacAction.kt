@@ -69,7 +69,7 @@ internal class ImportBacpacAction : DumbAwareAction() {
 
         // 3) Build SqlPackage command for Import and run in Run tool window
         val commands = mutableListOf(
-            "SqlPackage",
+            "sqlpackage",
             "/Action:Import",
             "/SourceFile:$sourcePath",
             "/TargetServerName:$host${port?.let { ",${it}" } ?: ""}",
@@ -79,9 +79,9 @@ internal class ImportBacpacAction : DumbAwareAction() {
 
         if (dataSource.authProviderId == "ms-sso") {
             // commands.add("/UniversalAuthentication:true")
-        } else {
+        } else if (dataSource.authProviderId == "user-pass") {
             val credentials = DatabaseCredentials.getInstance().getCredentials(dataSource)
-            // Not used yet; relying on integrated auth/SSO or saved creds in environment
+            commands.addAll(arrayOf("/SourceUser:${credentials.userName!!}", "/SourcePassword:${credentials.getPasswordAsString()!!}"))
         }
 
         val commandLine = GeneralCommandLine(commands)
