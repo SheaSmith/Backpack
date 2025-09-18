@@ -81,7 +81,7 @@ internal class ImportBacpacAction : DumbAwareAction() {
             // commands.add("/UniversalAuthentication:true")
         } else if (dataSource.authProviderId == "user-pass") {
             val credentials = DatabaseCredentials.getInstance().getCredentials(dataSource)
-            commands.addAll(arrayOf("/SourceUser:${credentials.userName!!}", "/SourcePassword:${credentials.getPasswordAsString()!!}"))
+            commands.addAll(arrayOf("/TargetUser:${credentials.userName!!}", "/TargetPassword:${credentials.getPasswordAsString()!!}", "/UniversalAuthentication:False"))
         }
 
         val commandLine = GeneralCommandLine(commands)
